@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc" shape-rendering="crispEdges">
+  <title id="title">도트말씨 심벌</title>
+  <desc id="desc">타일 격자 ㅁ과 떨어진 골드 타일로 만든 말풍선 모양</desc>
+  <g fill="#007A78">
+    <rect x="40" y="40" width="144" height="24"/>
+    <rect x="40" y="64" width="24" height="120"/>
+    <rect x="160" y="64" width="24" height="96"/>
+    <rect x="64" y="160" width="96" height="24"/>
+  </g>
+  <rect x="184" y="184" width="24" height="24" fill="#F4B942"/>
+</svg>

@@ -1,0 +1,40 @@
+name: Validate website
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: website-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install exact dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Check public repository contents
+        run: npm run repo:check
+      - name: Test production output
+        run: npm test
+      - name: Lint source
+        run: npm run lint
+      - name: Type-check source
+        run: npm run typecheck
+      - name: Audit dependencies
+        run: npm run security

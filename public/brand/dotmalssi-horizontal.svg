@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 320" role="img" aria-labelledby="title desc">
+  <title id="title">도트말씨</title>
+  <desc id="desc">레트로 게임 한글화 공방 도트말씨 가로형 로고</desc>
+  <g shape-rendering="crispEdges">
+    <g fill="#007A78">
+      <rect x="48" y="48" width="144" height="24"/>
+      <rect x="48" y="72" width="24" height="120"/>
+      <rect x="168" y="72" width="24" height="96"/>
+      <rect x="72" y="168" width="96" height="24"/>
+    </g>
+    <rect x="192" y="192" width="24" height="24" fill="#F4B942"/>
+  </g>
+  <text x="280" y="142" fill="#17213A" font-family="Malgun Gothic, Noto Sans KR, sans-serif" font-size="104" font-weight="800" letter-spacing="-5">도트말씨</text>
+  <text x="286" y="202" fill="#007A78" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="2">DOTMALSSI · RETRO GAME LOCALIZATION</text>
+  <text x="286" y="255" fill="#17213A" font-family="Malgun Gothic, Noto Sans KR, sans-serif" font-size="24" font-weight="600">옛 게임의 말씨를 한 칸씩, 근거로 완성한다.</text>
+</svg>
