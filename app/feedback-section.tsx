@@ -23,7 +23,7 @@ export default async function FeedbackSection() {
         </div>
 
         <div className="automation-status" role="status">
-          <span>주간 점검 · READ ONLY</span>
+          <span>주간 패치 리허설 · 1/3 READ ONLY</span>
           <span>답변 큐 · APPROVED ONLY</span>
           <span>자동 생성·공개 · OFF</span>
         </div>

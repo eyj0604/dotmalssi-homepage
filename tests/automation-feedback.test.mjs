@@ -85,23 +85,35 @@ function validPost(body = "도트말씨의 다음 소식이 정말 기대됩니�
 }
 
 test("keeps the weekly automation read-only until manual release gates pass", async () => {
-  const [plan, workflow] = await Promise.all([
+  const [plan, workflow, readinessSource] = await Promise.all([
     readFile(new URL("automation/release-plan.json", root), "utf8").then(JSON.parse),
     readFile(new URL(".github/workflows/weekly-readiness.yml", root), "utf8"),
+    readFile(new URL("scripts/weekly-readiness.mjs", root), "utf8"),
   ]);
 
   assert.equal(plan.mode, "read_only_readiness");
   assert.equal(plan.public_write_enabled, false);
   assert.equal(plan.manual_release_sprints_required, 3);
-  assert.equal(plan.manual_release_sprints_completed, 0);
+  assert.equal(plan.manual_release_sprints_completed, 1);
   assert.equal(plan.kill_switch, true);
   assert.equal(plan.max_retries, 2);
+  assert.equal(plan.projects.length, 1);
+  assert.equal(plan.projects[0].id, "dbz_log2_gba");
+  assert.equal(plan.projects[0].project_write_enabled, false);
+  assert.equal(plan.projects[0].status_source, "automation/projects/dbz_log2_gba.json");
+  assert.equal(plan.projects[0].expected_release_version, "1.0-rc2");
+  assert.equal(plan.projects[0].expected_approval_decision, "DBZ2-20260714-001@1");
   assert.match(workflow, /timezone:\s*"Asia\/Seoul"/);
   assert.match(workflow, /permissions:\s*\n\s*contents:\s*read/);
   assert.doesNotMatch(workflow, /contents:\s*write|releases:\s*write|issues:\s*write/);
   assert.doesNotMatch(workflow, /uses:\s*[^\s]+@v\d+/);
   assert.match(workflow, /actions\/checkout@[0-9a-f]{40}/);
   assert.match(workflow, /actions\/setup-node@[0-9a-f]{40}/);
+  assert.match(
+    readinessSource,
+    /const readyForWriteAutomation = manualGatesComplete && plan\.public_write_enabled === true/,
+  );
+  assert.doesNotMatch(readinessSource, /fetch\s*\(|https?:\/\//);
 
   const result = spawnSync(process.execPath, ["scripts/weekly-readiness.mjs"], {
     cwd: new URL("../", import.meta.url),
@@ -110,7 +122,15 @@ test("keeps the weekly automation read-only until manual release gates pass", as
   assert.equal(result.status, 0, result.stderr);
   const report = JSON.parse(result.stdout);
   assert.equal(report.ok, true);
+  assert.equal(report.manual_gates_complete, false);
   assert.equal(report.ready_for_write_automation, false);
+  assert.equal(report.manual_sprints, "1/3");
+  assert.equal(report.configured_projects, 1);
+  assert.equal(report.projects.length, 1);
+  assert.equal(report.projects[0].id, "dbz_log2_gba");
+  assert.equal(report.projects[0].ready, true);
+  assert.equal(report.projects[0].stable_v1_ready, false);
+  assert.equal(report.projects[0].public_write_enabled, false);
 });
 
 test("stores a pending post without raw identity or an automatic reply job", async () => {

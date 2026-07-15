@@ -21,7 +21,7 @@ const projects = [
     tone: "release",
     summary:
       "v1.0-rc2가 현재 공개 배포 정본입니다. RC는 안정판과 구분해 표시합니다.",
-    next: "다음 게이트 · 처음부터 엔딩까지 연속 플레이스루",
+    next: "주간 릴리스 리허설 1/3 · 공개 쓰기 OFF · 다음 게이트는 연속 플레이스루",
   },
   {
     id: "dbz1",
@@ -176,7 +176,7 @@ export default function Home() {
                 </a>
               </div>
               <p className="hero-note">
-                현황 기준 <time dateTime="2026-07-14">2026.07.14</time> ·
+                현황 기준 <time dateTime="2026-07-15">2026.07.15</time> ·
                 배정 전 정본에서 다시 측정합니다.
               </p>
             </div>

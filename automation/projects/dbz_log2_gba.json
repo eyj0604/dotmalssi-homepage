@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "id": "dbz_log2_gba",
+  "display_name": "드래곤볼 Z: 오공의 유산 II",
+  "release_channel": "manual_existing_public_rc",
+  "release_status": "public_rc_approved",
+  "release_version": "1.0-rc2",
+  "canonical_package_sha256": "2B6D6754B2F6923F63FD20C039962C66D25924AA91F1610AD9AD6B8F278A4BBE",
+  "approval_decision": "DBZ2-20260714-001@1",
+  "manual_sprint_id": "DBZ2-WEEKLY-RELEASE-SPRINT-01-20260715",
+  "manual_sprint_result": "pass",
+  "sprint_evidence_sha256": "7065CCF1A3A51AA5BDB6E74530B2B1CE56434AAC2985EDE9CE35084689DED42A",
+  "readiness_script_sha256": "7D9849F459279539F9EF50BF1625E75D872E83F08AB15E4ED9454F9AE78969F7",
+  "full_playthrough_verified": false,
+  "stable_v1_ready": false,
+  "public_write_enabled": false,
+  "snapshot_date": "2026-07-15"
+}

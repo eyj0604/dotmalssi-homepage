@@ -5,8 +5,21 @@
   "schedule": "Friday 21:17",
   "public_write_enabled": false,
   "manual_release_sprints_required": 3,
-  "manual_release_sprints_completed": 0,
+  "manual_release_sprints_completed": 1,
   "max_retries": 2,
   "kill_switch": true,
-  "projects": []
+  "projects": [
+    {
+      "id": "dbz_log2_gba",
+      "status_source": "automation/projects/dbz_log2_gba.json",
+      "release_channel": "manual_existing_public_rc",
+      "required_sprint_id": "DBZ2-WEEKLY-RELEASE-SPRINT-01-20260715",
+      "expected_release_version": "1.0-rc2",
+      "expected_approval_decision": "DBZ2-20260714-001@1",
+      "expected_package_sha256": "2B6D6754B2F6923F63FD20C039962C66D25924AA91F1610AD9AD6B8F278A4BBE",
+      "expected_sprint_evidence_sha256": "7065CCF1A3A51AA5BDB6E74530B2B1CE56434AAC2985EDE9CE35084689DED42A",
+      "expected_readiness_script_sha256": "7D9849F459279539F9EF50BF1625E75D872E83F08AB15E4ED9454F9AE78969F7",
+      "project_write_enabled": false
+    }
+  ]
 }
