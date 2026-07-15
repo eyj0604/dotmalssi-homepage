@@ -13,6 +13,9 @@ interface Env {
       };
     };
   };
+  DB: unknown;
+  FEEDBACK_ID_PEPPER?: string;
+  FEEDBACK_WRITE_ENABLED?: string;
 }
 
 interface ExecutionContext {

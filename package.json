@@ -1,6 +1,6 @@
 {
   "name": "dotmalssi-homepage",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "license": "UNLICENSED",
   "engines": {
@@ -10,13 +10,15 @@
     "dev": "vinext dev",
     "build": "vinext build",
     "start": "vinext start",
-    "test": "npm run build && node --test tests/rendered-html.test.mjs tests/public-repo-check.test.mjs",
+    "test": "npm run build && node --test tests/rendered-html.test.mjs tests/public-repo-check.test.mjs tests/automation-feedback.test.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "typecheck": "tsc --noEmit",
     "security": "npm audit --audit-level=moderate",
-    "repo:check": "node scripts/public-repo-check.mjs"
+    "repo:check": "node scripts/public-repo-check.mjs",
+    "release:readiness": "node scripts/weekly-readiness.mjs"
   },
   "dependencies": {
+    "drizzle-orm": "^0.45.2",
     "next": "16.2.6",
     "react": "19.2.6",
     "react-dom": "19.2.6"

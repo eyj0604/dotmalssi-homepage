@@ -11,8 +11,10 @@
 
 - 홈페이지: <https://dotmalssi.eyj0604.chatgpt.site>
 - 공개 저장소: <https://github.com/eyj0604/dotmalssi-homepage>
-- 현재 버전: `0.1.1`
+- 현재 공개 버전: `0.1.1`
+- 다음 로컬 후보: `0.1.2`
 - 향후 계획과 권리 경계: [ROADMAP.md](ROADMAP.md)
+- 자동화·이용자 글 DB 경계: [AUTOMATION.md](AUTOMATION.md)
 
 ## 현재 범위
 
@@ -55,7 +57,24 @@ npm run lint
 npm run typecheck
 npm run security
 npm run repo:check
+npm run release:readiness
 ```
+
+## 자동화와 이용자 글
+
+v0.1.2 후보가 정확한 revision 승인을 받아 공개되면 첫 주간 작업은 매주 금요일
+21:17(Asia/Seoul)에 실행되는 읽기 전용 배포 준비 점검이다. 현재 공개 v0.1.1에는
+아직 실행되지 않는다. 수동 패치 릴리스 스프린트 세 번과 별도 승인이 끝나기 전에는
+GitHub Release나 홈페이지를 자동으로 수정하지 않는다.
+
+이용자 글은 D1에서 90일 뒤 처리·공개 대상에서 제외하되 원문 이메일은 저장하지
+않는다. 로그인 식별값은 런타임 비밀값과 함께 해시해 별도 도배 방지 표에서 2시간
+뒤 사용을 중단한다. 물리 삭제 반복 작업은 아직 승인되지 않았으므로 글 접수 스위치
+`FEEDBACK_WRITE_ENABLED`의 기본값은 `false`다. 글은 `pending`으로만 접수되고
+사람이 승인한 뒤에만 답변 큐에 들어갈 수 있다. 브라우저에 전달되는 철회키로 본인
+글을 삭제할 수 있으며, 답변 생성과 자동 공개는 현재 모두 꺼져 있다. 배포 환경은
+빈 변수명만 적힌 `.env.example`을 참고해 32바이트 이상의 실제
+`FEEDBACK_ID_PEPPER`를 호스팅 비밀값으로 별도 설정해야 한다.
 
 ## 저장소 안전선
 

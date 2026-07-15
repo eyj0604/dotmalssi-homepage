@@ -6,24 +6,31 @@ import test from "node:test";
 
 const projectRoot = new URL("../", import.meta.url);
 
-async function render(pathname = "/", origin = "http://localhost") {
+async function callWorker(request, bindings = {}) {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
   workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
   const { default: worker } = await import(workerUrl.href);
 
   return worker.fetch(
-    new Request(new URL(pathname, origin), {
-      headers: { accept: "text/html" },
-    }),
+    request,
     {
       ASSETS: {
         fetch: async () => new Response("Not found", { status: 404 }),
       },
+      ...bindings,
     },
     {
       waitUntil() {},
       passThroughOnException() {},
     },
+  );
+}
+
+async function render(pathname = "/", origin = "http://localhost") {
+  return callWorker(
+    new Request(new URL(pathname, origin), {
+      headers: { accept: "text/html" },
+    }),
   );
 }
 
@@ -43,6 +50,10 @@ test("renders the finished Korean homepage", async () => {
   assert.match(html, /독립 교차검수/);
   assert.match(html, /비공식 팬 한글화이며 원작 권리자와 무관합니다/);
   assert.match(html, /본문으로 바로가기/);
+  assert.match(html, /남긴 글은 검토하고/);
+  assert.match(html, /자동 생성·공개 · OFF/);
+  assert.match(html, /이야기함 접수는 아직 준비 중입니다/);
+  assert.match(html, /보존 기한 뒤 물리 삭제와 운영 검증/);
   assert.match(html, /application\/ld\+json/);
   assert.match(
     html,
@@ -82,7 +93,8 @@ test("ships canonical brand assets and accessibility rules", async () => {
   assert.match(page, /status-badge/);
   assert.match(layout, /alternates:/);
   assert.match(layout, /openGraph:/);
-  assert.doesNotMatch(packageJson, /react-loading-skeleton|drizzle-orm|drizzle-kit/);
+  assert.doesNotMatch(packageJson, /react-loading-skeleton/);
+  assert.match(packageJson, /drizzle-orm/);
   await assert.rejects(access(new URL("public/og.png", projectRoot)));
 });
 
@@ -138,4 +150,70 @@ test("serves host-aware robots and sitemap metadata", async () => {
 
   assert.match(await sitemap.text(), /https:\/\/example\.test\//);
   assert.match(await robots.text(), /Sitemap: https:\/\/example\.test\/sitemap\.xml/);
+});
+
+test("fails feedback writes closed before authentication or database access", async () => {
+  const response = await callWorker(
+    new Request("https://example.test/api/feedback", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        origin: "https://example.test",
+      },
+      body: JSON.stringify({
+        displayName: "방문자",
+        body: "안전한 테스트 글입니다.",
+        consent: true,
+      }),
+    }),
+  );
+
+  assert.equal(response.status, 401);
+  assert.deepEqual(await response.json(), { error: "sign_in_required" });
+});
+
+test("reports feedback database read failures instead of rendering an empty success", async () => {
+  const response = await callWorker(
+    new Request("https://example.test/api/feedback", {
+      headers: { accept: "application/json" },
+    }),
+  );
+
+  assert.equal(response.status, 503);
+  assert.deepEqual(await response.json(), { error: "feedback_unavailable" });
+});
+
+test("keeps feedback writes behind an explicit disabled-by-default runtime gate", async () => {
+  const [route, runtime, example] = await Promise.all([
+    readFile(new URL("app/api/feedback/route.ts", projectRoot), "utf8"),
+    readFile(new URL("db/runtime.ts", projectRoot), "utf8"),
+    readFile(new URL(".env.example", projectRoot), "utf8"),
+  ]);
+
+  assert.match(route, /isFeedbackWriteEnabled/);
+  assert.match(route, /feedback_write_disabled/);
+  assert.match(runtime, /FEEDBACK_WRITE_ENABLED === "true"/);
+  assert.match(runtime, /byteLength < 32/);
+  assert.match(example, /FEEDBACK_WRITE_ENABLED=false/);
+});
+
+test("fails authenticated feedback writes closed before database bindings when disabled", async () => {
+  const response = await callWorker(
+    new Request("https://example.test/api/feedback", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        origin: "https://example.test",
+        "oai-authenticated-user-email": ["visitor", "@", "example.test"].join(""),
+      },
+      body: JSON.stringify({
+        displayName: "방문자",
+        body: "접수 스위치 차단을 확인하는 안전한 글입니다.",
+        consent: true,
+      }),
+    }),
+  );
+
+  assert.equal(response.status, 503);
+  assert.deepEqual(await response.json(), { error: "feedback_write_disabled" });
 });

@@ -142,6 +142,7 @@ const blockedUrlPayload = /\.(?:3ds|7z|a26|a52|a78|bin|bios|ccd|chd|cia|col|cso|
 
 function isSensitivePath(path) {
   const name = basename(path).toLowerCase();
+  if (name === ".env.example") return false;
   return (
     name === ".env" ||
     name.startsWith(".env.") ||
@@ -169,6 +170,19 @@ function hasBlockedUrl(text) {
       const payload = decodeURIComponent(`${parsed.pathname}${parsed.search}`);
       if (blockedUrlPayload.test(`${payload}&`)) return true;
     } catch {
+      return true;
+    }
+  }
+  return false;
+}
+
+function hasUnpinnedGitHubAction(path, text) {
+  if (!/^\.github\/workflows\/.*\.ya?ml$/i.test(path)) return false;
+  for (const match of text.matchAll(/^\s*(?:-\s*)?uses:\s*([^\s#]+)/gim)) {
+    const action = match[1];
+    if (action.startsWith("./")) continue;
+    const separator = action.lastIndexOf("@");
+    if (separator < 1 || !/^[0-9a-f]{40}$/i.test(action.slice(separator + 1))) {
       return true;
     }
   }
@@ -214,6 +228,7 @@ for (const path of files) {
     if (!noreplyPattern.test(email)) add(path, "personal-email");
   }
   if (hasBlockedUrl(text)) add(path, "direct-rom-or-disc-url");
+  if (hasUnpinnedGitHubAction(path, text)) add(path, "unpinned-github-action");
 }
 
 const head = runGit(["rev-parse", "--verify", "HEAD"]);

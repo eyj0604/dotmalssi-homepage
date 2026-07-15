@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "mode": "read_only_readiness",
+  "timezone": "Asia/Seoul",
+  "schedule": "Friday 21:17",
+  "public_write_enabled": false,
+  "manual_release_sprints_required": 3,
+  "manual_release_sprints_completed": 0,
+  "max_retries": 2,
+  "kill_switch": true,
+  "projects": []
+}

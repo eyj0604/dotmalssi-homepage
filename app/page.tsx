@@ -1,4 +1,5 @@
 import Image from "next/image";
+import FeedbackSection from "./feedback-section";
 
 const projects = [
   {
@@ -144,6 +145,7 @@ export default function Home() {
             <a href="#projects">프로젝트</a>
             <a href="#team">팀</a>
             <a href="#workflow">작업 방식</a>
+            <a href="#feedback">이야기함</a>
             <a href="#principles">안전 원칙</a>
           </nav>
         </div>
@@ -400,6 +402,8 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        <FeedbackSection />
 
         <section className="closing-section" aria-labelledby="closing-title">
           <div className="shell closing-grid">

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -75,6 +75,21 @@ test("accepts a clean text-only public repository", () => {
   }
 });
 
+test("accepts the documented blank environment example", () => {
+  const root = makeRepo();
+  try {
+    writeFileSync(
+      join(root, ".env.example"),
+      "FEEDBACK_ID_PEPPER=\nFEEDBACK_WRITE_ENABLED=false\n",
+      "utf8",
+    );
+    const result = check(root);
+    assert.equal(result.status, 0, result.stderr);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test("accepts GitHub's synthetic pull-request noreply identity", () => {
   const githubNoreply = ["noreply", "@", "github.com"].join("");
   const root = makeRepo(githubNoreply);
@@ -123,6 +138,19 @@ expectBlocked(
   "rejects additional retro ROM extensions",
   (root) => writeFileSync(join(root, "game.pce"), "payload\n", "utf8"),
   "blocked-public-file-type",
+);
+expectBlocked(
+  "rejects mutable GitHub Action tags",
+  (root) => {
+    const workflowDir = join(root, ".github", "workflows");
+    mkdirSync(workflowDir, { recursive: true });
+    writeFileSync(
+      join(workflowDir, "unsafe.yml"),
+      "jobs:\n  check:\n    steps:\n      - uses: actions/checkout@v4\n",
+      "utf8",
+    );
+  },
+  "unpinned-github-action",
 );
 
 test("rejects commit metadata that exposes a personal email", () => {

@@ -1,19 +1,20 @@
-name: Validate website
+name: Weekly release readiness
 
 on:
-  pull_request:
-  push:
-    branches: [main]
+  schedule:
+    - cron: "17 21 * * 5"
+      timezone: "Asia/Seoul"
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: website-${{ github.workflow }}-${{ github.ref }}
+  group: weekly-release-readiness
   cancel-in-progress: true
 
 jobs:
-  validate:
+  readiness:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -30,11 +31,5 @@ jobs:
         run: npm ci --ignore-scripts --no-audit --no-fund
       - name: Check public repository contents
         run: npm run repo:check
-      - name: Test production output
-        run: npm test
-      - name: Lint source
-        run: npm run lint
-      - name: Type-check source
-        run: npm run typecheck
-      - name: Audit dependencies
-        run: npm run security
+      - name: Write read-only readiness summary
+        run: npm run release:readiness
