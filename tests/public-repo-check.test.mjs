@@ -1,6 +1,12 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import {
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -9,6 +15,11 @@ import { fileURLToPath } from "node:url";
 const checker = fileURLToPath(
   new URL("../scripts/public-repo-check.mjs", import.meta.url),
 );
+const approvedSupportContact = readFileSync(
+  fileURLToPath(new URL("../public/support-contact.json", import.meta.url)),
+  "utf8",
+);
+const approvedSupportEmail = JSON.parse(approvedSupportContact).email;
 
 function findGit() {
   const candidates = [
@@ -48,6 +59,16 @@ function check(root) {
     encoding: "utf8",
     env: { ...process.env, GIT_BINARY: git },
   });
+}
+
+function approveSupportContact(root) {
+  const publicDir = join(root, "public");
+  mkdirSync(publicDir, { recursive: true });
+  writeFileSync(
+    join(publicDir, "support-contact.json"),
+    approvedSupportContact,
+    "utf8",
+  );
 }
 
 function expectBlocked(name, create, rule, hiddenText = null) {
@@ -96,6 +117,95 @@ test("accepts GitHub's synthetic pull-request noreply identity", () => {
   try {
     const result = check(root);
     assert.equal(result.status, 0, result.stderr);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("accepts only the exact user-approved public support contact", () => {
+  const root = makeRepo();
+  try {
+    approveSupportContact(root);
+    writeFileSync(join(root, "CONTACT.md"), `${approvedSupportEmail}\n`, "utf8");
+    const result = check(root);
+    assert.equal(result.status, 0, result.stderr);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("still rejects a different personal email when support contact is approved", () => {
+  const root = makeRepo();
+  try {
+    approveSupportContact(root);
+    writeFileSync(
+      join(root, "CONTACT.md"),
+      `${["owner", "@", "example.com"].join("")}\n`,
+      "utf8",
+    );
+    const result = check(root);
+    assert.equal(result.status, 1, result.stdout);
+    assert.match(result.stderr, /personal-email/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+for (const [name, mutate] of [
+  [
+    "email",
+    (contact) => {
+      contact.email = ["attacker", "@", "example.com"].join("");
+    },
+  ],
+  [
+    "revision",
+    (contact) => {
+      contact.revision += 1;
+    },
+  ],
+  [
+    "approval reference",
+    (contact) => {
+      contact.approval_reference = "FORGED-REFERENCE";
+    },
+  ],
+]) {
+  test(`rejects a normal-form support contact with tampered ${name}`, () => {
+    const root = makeRepo();
+    try {
+      const publicDir = join(root, "public");
+      mkdirSync(publicDir, { recursive: true });
+      const contact = JSON.parse(approvedSupportContact);
+      mutate(contact);
+      writeFileSync(
+        join(publicDir, "support-contact.json"),
+        `${JSON.stringify(contact, null, 2)}\n`,
+        "utf8",
+      );
+      const result = check(root);
+      assert.equal(result.status, 1, result.stdout);
+      assert.match(result.stderr, /invalid-public-contact-approval/);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+}
+
+test("rejects a malformed public support contact approval", () => {
+  const root = makeRepo();
+  try {
+    const publicDir = join(root, "public");
+    mkdirSync(publicDir, { recursive: true });
+    const malformedEmail = ["support", "@", "example.com"].join("");
+    writeFileSync(
+      join(publicDir, "support-contact.json"),
+      `${JSON.stringify({ status: "user_approved", email: malformedEmail })}\n`,
+      "utf8",
+    );
+    const result = check(root);
+    assert.equal(result.status, 1, result.stdout);
+    assert.match(result.stderr, /invalid-public-contact-approval/);
   } finally {
     rmSync(root, { recursive: true, force: true });
   }

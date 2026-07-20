@@ -46,6 +46,10 @@ test("renders the finished Korean homepage", async () => {
   assert.match(html, /한 칸씩, 근거로 완성한다/);
   assert.match(html, /Lunar Legend GBA/);
   assert.match(html, /공개 RC2/);
+  assert.match(html, /RC2 공개 보류/);
+  assert.match(html, /내 기기에서 바로 적용합니다/);
+  assert.match(html, /eyj79@naver\.com/);
+  assert.match(html, /Lunar Legend RC2는 아직 제공하지 않습니다/);
   assert.match(html, /매듭/);
   assert.match(html, /독립 교차검수/);
   assert.match(html, /비공식 팬 한글화이며 원작 권리자와 무관합니다/);
@@ -64,6 +68,7 @@ test("renders the finished Korean homepage", async () => {
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|SkeletonPreview/i);
   assert.doesNotMatch(html, /react-loading-skeleton/i);
   assert.doesNotMatch(html, /href="[^"]+\.(?:gb|gbc|gba|nes|sfc|smc|sav|state|zip)"/i);
+  assert.doesNotMatch(html, /href="[^"]+\.bps"/i);
   assert.doesNotMatch(html, /roms?(?:download|\/|\.)/i);
 });
 

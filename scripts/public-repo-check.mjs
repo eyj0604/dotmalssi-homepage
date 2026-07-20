@@ -1,5 +1,6 @@
 import { spawnSync } from "node:child_process";
-import { lstatSync, readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { existsSync, lstatSync, readFileSync } from "node:fs";
 import { basename, extname, resolve } from "node:path";
 
 const root = process.cwd();
@@ -119,6 +120,10 @@ if (inventory.error || inventory.status !== 0) {
 const files = inventory.stdout.split("\0").filter(Boolean).sort();
 const findings = [];
 const add = (path, rule) => findings.push({ path, rule });
+const publicContactPath = resolve(root, "public", "support-contact.json");
+const approvedPublicContactSha256 =
+  "9A8DE44B8D258600B062E069A714FE93A69C0578B7A4186F921F4E804A76D0A7";
+const approvedPublicEmails = new Set();
 
 const textRules = [
   ["private-key-marker", /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/],
@@ -136,6 +141,7 @@ const textRules = [
   ],
 ];
 const emailPattern = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi;
+const exactEmailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 const noreplyPattern = /^(?:[^@\s]+@users\.noreply\.github\.com|noreply@github\.com)$/i;
 const urlPattern = /https?:\/\/[^\s<>()"']+/gi;
 const blockedUrlPayload = /\.(?:3ds|7z|a26|a52|a78|bin|bios|ccd|chd|cia|col|cso|cue|fds|gb|gba|gbc|gcz|gen|gg|gz|img|int|iso|j64|lnx|mdf|mds|n64|nds|nes|ngc|ngp|pbp|pce|rar|rom|rvz|sav|sfc|smc|sms|srm|state[^/?#&=\s]*|tar|v64|vb|wad|wbfs|ws|wsc|z64|zip)(?:$|[/?#&=])/i;
@@ -189,6 +195,37 @@ function hasUnpinnedGitHubAction(path, text) {
   return false;
 }
 
+if (existsSync(publicContactPath)) {
+  try {
+    const contactBytes = readFileSync(publicContactPath);
+    const contactSha256 = createHash("sha256")
+      .update(contactBytes)
+      .digest("hex")
+      .toUpperCase();
+    const contact = JSON.parse(contactBytes.toString("utf8"));
+    const valid =
+      contactSha256 === approvedPublicContactSha256 &&
+      contact.schema === "dotmalssi_public_support_contact_v1" &&
+      contact.status === "user_approved" &&
+      contact.approval_scope === "public_support_contact" &&
+      contact.approved_by === "user" &&
+      Number.isInteger(contact.revision) &&
+      contact.revision > 0 &&
+      typeof contact.approval_reference === "string" &&
+      contact.approval_reference.length > 0 &&
+      typeof contact.email === "string" &&
+      exactEmailPattern.test(contact.email);
+
+    if (!valid) {
+      add("public/support-contact.json", "invalid-public-contact-approval");
+    } else {
+      approvedPublicEmails.add(contact.email.toLowerCase());
+    }
+  } catch {
+    add("public/support-contact.json", "invalid-public-contact-approval");
+  }
+}
+
 for (const path of files) {
   const fullPath = resolve(root, path);
   const stat = lstatSync(fullPath);
@@ -225,7 +262,12 @@ for (const path of files) {
     if (pattern.test(text)) add(path, rule);
   }
   for (const email of text.match(emailPattern) ?? []) {
-    if (!noreplyPattern.test(email)) add(path, "personal-email");
+    if (
+      !noreplyPattern.test(email) &&
+      !approvedPublicEmails.has(email.toLowerCase())
+    ) {
+      add(path, "personal-email");
+    }
   }
   if (hasBlockedUrl(text)) add(path, "direct-rom-or-disc-url");
   if (hasUnpinnedGitHubAction(path, text)) add(path, "unpinned-github-action");

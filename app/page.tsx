@@ -1,4 +1,5 @@
 import Image from "next/image";
+import BrowserPatcher from "./browser-patcher";
 import FeedbackSection from "./feedback-section";
 
 const projects = [
@@ -6,12 +7,12 @@ const projects = [
     id: "lunar",
     title: "Lunar Legend GBA",
     platform: "GAME BOY ADVANCE",
-    status: "번역 · 교차 검수",
-    tone: "active",
+    status: "RC2 공개 보류",
+    tone: "hold",
     summary:
-      "검수 대기분을 먼저 줄이는 활성 프로젝트입니다. 새 번역보다 검수 부채 해소를 우선합니다.",
-    next: "다음 게이트 · 검수 대기 505건 축소와 단계 상태 일치",
-    stats: ["전체 10,144", "완료 1,049", "검수 대기 505"],
+      "기술 후보 v0.9.0-rc2는 준비됐지만 구형 글꼴 이용 조건과 공개 패키지 게이트를 확인하고 있습니다.",
+    next: "다음 게이트 · 글꼴 권리 확인 또는 교체, 새 패키지 검수와 정확한 해시 승인",
+    stats: ["전체 10,144", "번역 확인 8,878", "사람 판단 1,266", "승인 배치 0"],
   },
   {
     id: "dbz2",
@@ -108,6 +109,13 @@ const structuredData = {
   alternateName: "DOTMALSSI",
   description:
     "원문·독립 검수·기술 QA·사용자 승인을 근거로 레트로 게임을 한국어로 잇는 비공식 팬 한글화 공방",
+  email: "mailto:eyj79@naver.com",
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "오류 및 수정 제보",
+    email: "eyj79@naver.com",
+    availableLanguage: "Korean",
+  },
   sameAs: ["https://github.com/eyj0604/dotmalssi-homepage"],
 };
 
@@ -143,6 +151,7 @@ export default function Home() {
 
           <nav className="primary-nav" aria-label="주요 메뉴">
             <a href="#projects">프로젝트</a>
+            <a href="#patch-center">온라인 패치</a>
             <a href="#team">팀</a>
             <a href="#workflow">작업 방식</a>
             <a href="#feedback">이야기함</a>
@@ -174,9 +183,12 @@ export default function Home() {
                 <a className="button button-secondary" href="#workflow">
                   작업 원칙 보기
                 </a>
+                <a className="button button-secondary" href="#patch-center">
+                  온라인 패치 도구
+                </a>
               </div>
               <p className="hero-note">
-                현황 기준 <time dateTime="2026-07-15">2026.07.15</time> ·
+                현황 기준 <time dateTime="2026-07-20">2026.07.20</time> ·
                 배정 전 정본에서 다시 측정합니다.
               </p>
             </div>
@@ -264,7 +276,7 @@ export default function Home() {
                   <h3>{project.title}</h3>
                   <p className="project-summary">{project.summary}</p>
                   {project.stats ? (
-                    <ul className="project-stats" aria-label="2026년 7월 14일 참고 수치">
+                    <ul className="project-stats" aria-label="2026년 7월 20일 참고 수치">
                       {project.stats.map((stat) => (
                         <li key={stat}>{stat}</li>
                       ))}
@@ -276,9 +288,60 @@ export default function Home() {
             </div>
 
             <p className="snapshot-note">
-              Lunar 수치는 참고 스냅샷입니다. 실제 배치 전에는 프로젝트의
-              실시간 상태 명령으로 다시 측정합니다.
+              Lunar RC2는 공개 보류 상태입니다. 이 표시는 패치 다운로드나
+              배포 승인을 뜻하지 않으며, 실제 작업 전에는 프로젝트 정본을 다시
+              측정합니다.
             </p>
+          </div>
+        </section>
+
+        <section className="section patch-center-section" id="patch-center">
+          <div className="shell">
+            <div className="section-heading section-heading-light">
+              <div>
+                <p className="section-kicker">LOCAL BPS PATCHER</p>
+                <h2>ROM을 보내지 않고, 내 기기에서 바로 적용합니다.</h2>
+              </div>
+              <p>
+                본인이 보유한 원본과 승인된 BPS 파일을 직접 선택하면 브라우저
+                안에서만 적용하고 체크섬까지 확인합니다. 선택한 파일은 서버로
+                업로드하지 않습니다.
+              </p>
+            </div>
+
+            <div className="patch-center-grid">
+              <BrowserPatcher />
+              <aside className="release-hold" aria-labelledby="release-hold-title">
+                <p className="section-kicker">RELEASE HOLD</p>
+                <h3 id="release-hold-title">Lunar Legend RC2는 아직 제공하지 않습니다.</h3>
+                <p>
+                  기술 검증 파일은 준비됐지만, 구형 갈무리M 글꼴의 공개 이용
+                  조건과 도트말씨 공개 패키지 게이트가 해결되지 않았습니다.
+                  권리와 정확한 파일 승인이 끝나기 전에는 다운로드나 자동 선택
+                  목록에 넣지 않습니다.
+                </p>
+                <dl>
+                  <div>
+                    <dt>현재 상태</dt>
+                    <dd>공개 보류</dd>
+                  </div>
+                  <div>
+                    <dt>ROM 전송</dt>
+                    <dd>없음</dd>
+                  </div>
+                  <div>
+                    <dt>지원</dt>
+                    <dd>
+                      <a href="mailto:eyj79@naver.com">eyj79@naver.com</a>
+                    </dd>
+                  </div>
+                </dl>
+                <p className="release-hold-note">
+                  제보할 때 원본 ROM은 첨부하지 말고, 패치 이름·오류 문구·화면
+                  사진·재현 위치만 보내 주세요.
+                </p>
+              </aside>
+            </div>
           </div>
         </section>
 
@@ -414,7 +477,12 @@ export default function Home() {
             <div>
               <p>
                 공개 가능한 코드와 작업 기록은 GitHub에서 차근차근 정리합니다.
-                패치 다운로드는 정확한 릴리스 승인과 검증이 끝난 항목에만 열립니다.
+                패치 다운로드와 자동 선택은 정확한 릴리스 승인과 검증이 끝난
+                항목에만 열립니다. 오류·수정 제보는{" "}
+                <a className="inline-mail" href="mailto:eyj79@naver.com">
+                  eyj79@naver.com
+                </a>
+                으로 보내 주세요.
               </p>
               <a
                 className="button button-gold"
@@ -443,6 +511,10 @@ export default function Home() {
           <div className="footer-notice">
             <p>비공식 팬 한글화이며 원작 권리자와 무관합니다.</p>
             <p>이 사이트는 ROM·BIOS·세이브 파일을 제공하지 않습니다.</p>
+            <p>
+              오류·수정 제보:{" "}
+              <a href="mailto:eyj79@naver.com">eyj79@naver.com</a>
+            </p>
           </div>
           <p className="footer-copy">© 2026 DOTMALSSI. 기록과 근거로 이어갑니다.</p>
         </div>

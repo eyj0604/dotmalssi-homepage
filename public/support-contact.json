@@ -1,0 +1,11 @@
+{
+  "schema": "dotmalssi_public_support_contact_v1",
+  "revision": 1,
+  "status": "user_approved",
+  "approval_scope": "public_support_contact",
+  "approved_by": "user",
+  "approval_reference": "STUDIO-HOMEPAGE-PATCH-CENTER-20260720",
+  "approved_at": "2026-07-20",
+  "purpose": "오류 및 수정 제보",
+  "email": "eyj79@naver.com"
+}
