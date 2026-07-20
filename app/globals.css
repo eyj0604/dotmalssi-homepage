@@ -485,20 +485,27 @@ a {
   background: var(--aqua);
 }
 
-.project-dbz2 {
+.project-sanpo {
   grid-column: span 5;
+  background: #fff8dc;
+}
+
+.project-sanpo::before {
+  background: var(--gold);
+}
+
+.project-dbz2,
+.project-dbz1 {
+  grid-column: span 6;
 }
 
 .project-dbz2::before {
   background: var(--gold);
 }
 
-.project-dbz1,
 .project-aretha {
-  grid-column: span 6;
-}
-
-.project-aretha {
+  grid-column: span 12;
+  min-height: 260px;
   background: var(--paper-deep);
 }
 
@@ -535,6 +542,11 @@ a {
 
 .status-active {
   background: var(--aqua);
+  color: var(--ink);
+}
+
+.status-beta {
+  background: var(--gold);
   color: var(--ink);
 }
 
@@ -1119,6 +1131,113 @@ a {
   color: var(--paper);
 }
 
+.release-library-section {
+  border-top: 2px solid var(--ink);
+  background:
+    linear-gradient(rgba(23, 33, 58, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(23, 33, 58, 0.04) 1px, transparent 1px),
+    var(--paper-deep);
+  background-size: 24px 24px;
+}
+
+.release-library-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 30px;
+}
+
+.release-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 2px solid var(--ink);
+  background: var(--white);
+  box-shadow: var(--shadow);
+}
+
+.release-video {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-bottom: 2px solid var(--ink);
+  background: var(--ink);
+}
+
+.release-video iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.release-card-body {
+  display: grid;
+  gap: 18px;
+  padding: 28px;
+}
+
+.release-card-body h3 {
+  margin: 2px 0 0;
+  font-size: clamp(27px, 3vw, 38px);
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+}
+
+.release-card-body > p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.release-patch-note {
+  padding: 16px;
+  border-left: 6px solid var(--tile);
+  background: var(--paper);
+  color: var(--ink) !important;
+  font-weight: 800;
+}
+
+.release-sanposuru .release-patch-note {
+  border-left-color: var(--gold);
+}
+
+.release-facts {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.release-facts li {
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+}
+
+.release-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.release-links .button {
+  min-height: 44px;
+  padding: 10px 14px;
+  font-size: 12px;
+}
+
+.source-note {
+  margin: 30px 0 0;
+  padding: 18px 20px;
+  border: 1px solid var(--ink);
+  background: var(--white);
+  font-size: 13px;
+  font-weight: 800;
+}
+
 .patch-center-section {
   border-block: 2px solid var(--ink);
   background: var(--tile-dark);
@@ -1413,6 +1532,10 @@ a {
     grid-template-columns: 1fr;
   }
 
+  .release-library-grid {
+    grid-template-columns: 1fr;
+  }
+
   .release-wave > p {
     grid-column: auto;
   }
@@ -1481,6 +1604,7 @@ a {
   }
 
   .project-lunar,
+  .project-sanpo,
   .project-dbz2,
   .project-dbz1,
   .project-aretha {
@@ -1589,6 +1713,15 @@ a {
   .release-hold {
     padding: 22px;
     box-shadow: 6px 6px 0 var(--gold);
+  }
+
+  .release-card-body {
+    padding: 22px;
+  }
+
+  .release-links,
+  .release-links .button {
+    width: 100%;
   }
 
   .patcher-result dl div {

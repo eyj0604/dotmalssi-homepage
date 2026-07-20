@@ -124,6 +124,12 @@ const publicContactPath = resolve(root, "public", "support-contact.json");
 const approvedPublicContactSha256 =
   "9A8DE44B8D258600B062E069A714FE93A69C0578B7A4186F921F4E804A76D0A7";
 const approvedPublicEmails = new Set();
+const approvedBinarySha256 = new Map([
+  [
+    "public/og.png",
+    "9306B095BE56104E84D50D78614E710CE3EB9A58AF380ABE3651A452542E38B0",
+  ],
+]);
 
 const textRules = [
   ["private-key-marker", /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/],
@@ -253,7 +259,9 @@ for (const path of files) {
 
   const bytes = readFileSync(fullPath);
   if (looksBinary(bytes)) {
-    add(path, "unapproved-binary");
+    const expected = approvedBinarySha256.get(path.replaceAll("\\", "/"));
+    const actual = createHash("sha256").update(bytes).digest("hex").toUpperCase();
+    if (!expected || actual !== expected) add(path, "unapproved-binary");
     continue;
   }
 

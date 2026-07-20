@@ -15,6 +15,17 @@ const projects = [
     stats: ["전체 10,144", "번역 확인 8,878", "사람 판단 1,266", "승인 배치 0"],
   },
   {
+    id: "sanpo",
+    title: "LUNAR 산책하는 학원",
+    platform: "GAME GEAR",
+    status: "미검수 공개 베타",
+    tone: "beta",
+    summary:
+      "public-beta-1 IPS를 공개했습니다. 정적 검사와 깨끗한 원본 재적용은 통과했지만 전 구간 플레이는 완료하지 않았습니다.",
+    next: "오류 제보를 받아 제3장부터 엔딩까지의 진행·메뉴·전투·저장 경로를 검증",
+    stats: ["안정 ID 2,048", "원문 fallback 0", "전체 플레이 미완료"],
+  },
+  {
     id: "dbz2",
     title: "DBZ: Legacy of Goku 2",
     platform: "GAME BOY ADVANCE",
@@ -43,6 +54,73 @@ const projects = [
     summary:
       "과거 자료는 분석 단서로만 보존합니다. 오염된 삽입·빌드 계통은 현행 작업으로 승격하지 않습니다.",
     next: "다음 게이트 · 검증된 원본에서 새 라운드트립 빌드",
+  },
+];
+
+const releaseLibrary = [
+  {
+    id: "lunar-legend",
+    title: "Lunar Legend",
+    platform: "Game Boy Advance · 2002 · RPG",
+    status: "RC2 공개 보류",
+    tone: "hold",
+    description:
+      "드래곤 마스터를 꿈꾸는 아레스와 루나의 여정을 휴대용으로 다시 구성한 작품입니다. 2D 필드와 턴제 전투, 아츠 게이지를 중심으로 진행합니다.",
+    patchNote:
+      "한국어 기술 후보 v0.9.0-rc2는 상태창과 파티 이름 가독성을 보완했습니다. 구형 글꼴 이용 조건이 확인되지 않아 다운로드는 열지 않습니다.",
+    facts: [
+      "지원 예정 원본 · 북미판 ALNE · 8,388,608 bytes",
+      "BPS SHA-256 · F13F006A…A88A8CFE",
+      "게임플레이 영상은 영어판 원작 참고용",
+    ],
+    links: [
+      {
+        label: "게임 정보",
+        href: "https://en.wikipedia.org/wiki/Lunar_Legend",
+      },
+      {
+        label: "리뷰·스크린샷",
+        href: "https://www.rpgfan.com/review/lunar-legend-2/",
+      },
+    ],
+    videoId: "lRmFZrtoi_Q",
+    videoTitle: "Lunar Legend Game Boy Advance 플레이 영상",
+  },
+  {
+    id: "sanposuru",
+    title: "LUNAR 산책하는 학원",
+    platform: "Game Gear · 1996 · RPG",
+    status: "public-beta-1 공개",
+    tone: "beta",
+    description:
+      "이동하는 섬 이엔의 마법학교에서 엘리·세니아·레나가 모험과 시련을 겪는 LUNAR 외전입니다. 전 12장으로 이어지는 학원 생활과 의뢰 중심의 RPG입니다.",
+    patchNote:
+      "대사·UI·몬스터명 안정 ID 2,048개와 한국어 타이틀을 담았습니다. 전 구간 플레이 전이므로 진행 불가·깨짐·잘림·문맥 오류 제보를 받는 공개 베타입니다.",
+    facts: [
+      "지원 원본 · 일본판 · 524,288 bytes",
+      "IPS SHA-256 · 460FB1B6…0BA8747",
+      "예상 결과 SHA-256 · 06B186F7…326E95",
+    ],
+    links: [
+      {
+        label: "패치 내려받기",
+        href: "https://github.com/eyj0604/dotmalssi-homepage/releases/tag/lunar-sanposuru-gakuen-kr-public-beta-1",
+      },
+      {
+        label: "게임 정보",
+        href: "https://ja.wikipedia.org/wiki/LUNAR_%E3%81%95%E3%82%93%E3%81%BD%E3%81%99%E3%82%8B%E5%AD%A6%E5%9C%92",
+      },
+      {
+        label: "소개·스크린샷",
+        href: "https://gamegear.jp/lunarsanposurugakuen/",
+      },
+      {
+        label: "공략 · 스포일러",
+        href: "https://gesato.com/gg/lunar-sanpo/kouryaku.html",
+      },
+    ],
+    videoId: "8QyYRnfA8bo",
+    videoTitle: "LUNAR 산책하는 학원 Game Gear 플레이 영상",
   },
 ];
 
@@ -151,6 +229,7 @@ export default function Home() {
 
           <nav className="primary-nav" aria-label="주요 메뉴">
             <a href="#projects">프로젝트</a>
+            <a href="#releases">배포·게임 정보</a>
             <a href="#patch-center">온라인 패치</a>
             <a href="#team">팀</a>
             <a href="#workflow">작업 방식</a>
@@ -288,9 +367,76 @@ export default function Home() {
             </div>
 
             <p className="snapshot-note">
-              Lunar RC2는 공개 보류 상태입니다. 이 표시는 패치 다운로드나
-              배포 승인을 뜻하지 않으며, 실제 작업 전에는 프로젝트 정본을 다시
-              측정합니다.
+              Lunar Legend RC2는 공개 보류 상태입니다. LUNAR 산책하는 학원은
+              전체 플레이가 끝나지 않은 공개 베타이므로 정식판과 구분합니다.
+            </p>
+          </div>
+        </section>
+
+        <section className="section release-library-section" id="releases">
+          <div className="shell">
+            <div className="section-heading">
+              <div>
+                <p className="section-kicker">PATCH LIBRARY</p>
+                <h2>패치와 함께, 게임을 알아볼 길도 엮었습니다.</h2>
+              </div>
+              <p>
+                원작 정보와 참고 영상은 외부 출처로 연결합니다. 스크린샷을
+                무단 재배포하지 않고 원문 페이지와 영상 플레이어를 그대로
+                안내합니다.
+              </p>
+            </div>
+
+            <div className="release-library-grid">
+              {releaseLibrary.map((release) => (
+                <article className={`release-card release-${release.id}`} key={release.id}>
+                  <div className="release-video">
+                    <iframe
+                      src={`https://www.youtube-nocookie.com/embed/${release.videoId}`}
+                      title={release.videoTitle}
+                      loading="lazy"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      allowFullScreen
+                    />
+                  </div>
+                  <div className="release-card-body">
+                    <div className="project-meta">
+                      <span>{release.platform}</span>
+                      <span className={`status-badge status-${release.tone}`}>
+                        {release.status}
+                      </span>
+                    </div>
+                    <h3>{release.title}</h3>
+                    <p>{release.description}</p>
+                    <p className="release-patch-note">{release.patchNote}</p>
+                    <ul className="release-facts">
+                      {release.facts.map((fact) => (
+                        <li key={fact}>{fact}</li>
+                      ))}
+                    </ul>
+                    <div className="release-links" aria-label={`${release.title} 관련 링크`}>
+                      {release.links.map((link) => (
+                        <a
+                          className="button button-secondary"
+                          href={link.href}
+                          target="_blank"
+                          rel="noreferrer"
+                          key={link.href}
+                        >
+                          {link.label} <span aria-hidden="true">↗</span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <p className="source-note">
+              영상과 외부 페이지의 저작권은 각 권리자에게 있습니다. 도트말씨는
+              패치 파일만 배포하며 ROM·세이브·세이브스테이트를 제공하지
+              않습니다.
             </p>
           </div>
         </section>
@@ -299,46 +445,56 @@ export default function Home() {
           <div className="shell">
             <div className="section-heading section-heading-light">
               <div>
-                <p className="section-kicker">LOCAL BPS PATCHER</p>
+                <p className="section-kicker">LOCAL BPS + IPS PATCHER</p>
                 <h2>ROM을 보내지 않고, 내 기기에서 바로 적용합니다.</h2>
               </div>
               <p>
-                본인이 보유한 원본과 승인된 BPS 파일을 직접 선택하면 브라우저
-                안에서만 적용하고 체크섬까지 확인합니다. 선택한 파일은 서버로
-                업로드하지 않습니다.
+                본인이 보유한 원본과 체크섬이 있는 BPS 또는 공개 승인된 IPS를
+                직접 선택하면 브라우저 안에서만 적용하고 결과까지 확인합니다.
+                선택한 파일은 서버로 업로드하지 않습니다.
               </p>
             </div>
 
             <div className="patch-center-grid">
               <BrowserPatcher />
               <aside className="release-hold" aria-labelledby="release-hold-title">
-                <p className="section-kicker">RELEASE HOLD</p>
-                <h3 id="release-hold-title">Lunar Legend RC2는 아직 제공하지 않습니다.</h3>
+                <p className="section-kicker">PUBLIC BETA</p>
+                <h3 id="release-hold-title">
+                  산책하는 학원 IPS는 공개했고, GBA RC2는 보류합니다.
+                </h3>
                 <p>
-                  기술 검증 파일은 준비됐지만, 구형 갈무리M 글꼴의 공개 이용
-                  조건과 도트말씨 공개 패키지 게이트가 해결되지 않았습니다.
-                  권리와 정확한 파일 승인이 끝나기 전에는 다운로드나 자동 선택
-                  목록에 넣지 않습니다.
+                  Game Gear public-beta-1은 정확한 IPS와 지원 원본·결과 해시를
+                  확인합니다. Lunar Legend GBA 기술 후보는 구형 갈무리M 글꼴의
+                  공개 이용 조건이 해결되기 전까지 내려받기를 열지 않습니다.
                 </p>
                 <dl>
                   <div>
-                    <dt>현재 상태</dt>
-                    <dd>공개 보류</dd>
+                    <dt>Game Gear</dt>
+                    <dd>
+                      <a
+                        href="https://github.com/eyj0604/dotmalssi-homepage/releases/tag/lunar-sanposuru-gakuen-kr-public-beta-1"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        미검수 공개 베타
+                      </a>
+                    </dd>
                   </div>
                   <div>
-                    <dt>ROM 전송</dt>
-                    <dd>없음</dd>
+                    <dt>GBA</dt>
+                    <dd>글꼴 권리 확인 전 공개 보류</dd>
                   </div>
                   <div>
-                    <dt>지원</dt>
+                    <dt>제보</dt>
                     <dd>
                       <a href="mailto:eyj79@naver.com">eyj79@naver.com</a>
                     </dd>
                   </div>
                 </dl>
                 <p className="release-hold-note">
-                  제보할 때 원본 ROM은 첨부하지 말고, 패치 이름·오류 문구·화면
-                  사진·재현 위치만 보내 주세요.
+                  제보할 때 패치 이름·오류 문구·장·맵·화면 사진·재현 순서를
+                  보내 주세요. 원본 ROM, 패치된 ROM, 세이브스테이트는 첨부하지
+                  마세요.
                 </p>
               </aside>
             </div>

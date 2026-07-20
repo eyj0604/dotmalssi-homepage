@@ -45,11 +45,28 @@ test("renders the finished Korean homepage", async () => {
   assert.match(html, /옛 게임의 말씨를/);
   assert.match(html, /한 칸씩, 근거로 완성한다/);
   assert.match(html, /Lunar Legend GBA/);
+  assert.match(html, /LUNAR 산책하는 학원/);
   assert.match(html, /공개 RC2/);
   assert.match(html, /RC2 공개 보류/);
+  assert.match(html, /미검수 공개 베타/);
+  assert.match(html, /public-beta-1 공개/);
   assert.match(html, /내 기기에서 바로 적용합니다/);
+  assert.match(html, /LOCAL BPS \+ IPS PATCHER/);
+  assert.match(html, /BPS는 자체 체크섬, IPS는 도트말씨 공개 승인 해시/);
   assert.match(html, /eyj79@naver\.com/);
-  assert.match(html, /Lunar Legend RC2는 아직 제공하지 않습니다/);
+  assert.match(html, /산책하는 학원 IPS는 공개했고, GBA RC2는 보류합니다/);
+  assert.match(
+    html,
+    /github\.com\/eyj0604\/dotmalssi-homepage\/releases\/tag\/lunar-sanposuru-gakuen-kr-public-beta-1/,
+  );
+  assert.match(html, /youtube-nocookie\.com\/embed\/lRmFZrtoi_Q/);
+  assert.match(html, /youtube-nocookie\.com\/embed\/8QyYRnfA8bo/);
+  assert.match(html, /공략 · 스포일러/);
+  assert.match(
+    html,
+    /property="og:image"[^>]+content="http:\/\/localhost(?::3000)?\/og\.png"/,
+  );
+  assert.match(html, /name="twitter:card"[^>]+content="summary_large_image"/);
   assert.match(html, /매듭/);
   assert.match(html, /독립 교차검수/);
   assert.match(html, /비공식 팬 한글화이며 원작 권리자와 무관합니다/);
@@ -69,6 +86,7 @@ test("renders the finished Korean homepage", async () => {
   assert.doesNotMatch(html, /react-loading-skeleton/i);
   assert.doesNotMatch(html, /href="[^"]+\.(?:gb|gbc|gba|nes|sfc|smc|sav|state|zip)"/i);
   assert.doesNotMatch(html, /href="[^"]+\.bps"/i);
+  assert.doesNotMatch(html, /href="[^"]+\.ips"/i);
   assert.doesNotMatch(html, /roms?(?:download|\/|\.)/i);
 });
 
@@ -100,7 +118,7 @@ test("ships canonical brand assets and accessibility rules", async () => {
   assert.match(layout, /openGraph:/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
   assert.match(packageJson, /drizzle-orm/);
-  await assert.rejects(access(new URL("public/og.png", projectRoot)));
+  await access(new URL("public/og.png", projectRoot));
 });
 
 test("public assets contain no prohibited game or secret files", async () => {

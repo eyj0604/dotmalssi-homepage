@@ -20,6 +20,9 @@ const approvedSupportContact = readFileSync(
   "utf8",
 );
 const approvedSupportEmail = JSON.parse(approvedSupportContact).email;
+const approvedSocialPreview = readFileSync(
+  fileURLToPath(new URL("../public/og.png", import.meta.url)),
+);
 
 function findGit() {
   const candidates = [
@@ -117,6 +120,26 @@ test("accepts GitHub's synthetic pull-request noreply identity", () => {
   try {
     const result = check(root);
     assert.equal(result.status, 0, result.stderr);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("accepts only the exact approved social preview binary", () => {
+  const root = makeRepo();
+  try {
+    const publicDir = join(root, "public");
+    mkdirSync(publicDir, { recursive: true });
+    writeFileSync(join(publicDir, "og.png"), approvedSocialPreview);
+    const result = check(root);
+    assert.equal(result.status, 0, result.stderr);
+
+    const tampered = Buffer.from(approvedSocialPreview);
+    tampered[tampered.length - 1] ^= 0xff;
+    writeFileSync(join(publicDir, "og.png"), tampered);
+    const rejected = check(root);
+    assert.equal(rejected.status, 1, rejected.stdout);
+    assert.match(rejected.stderr, /unapproved-binary/);
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
