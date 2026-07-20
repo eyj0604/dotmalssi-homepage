@@ -64,7 +64,7 @@ export async function generateMetadata(): Promise<Metadata> {
           url: "/og.png",
           width: 1536,
           height: 1024,
-          alt: "도트말씨 패치와 게임 정보 — GBA 공개 보류, Game Gear 공개 베타",
+          alt: "도트말씨 패치와 게임 정보 — GBA 공개 RC, Game Gear 공개 베타",
         },
       ],
     },

@@ -47,14 +47,23 @@ test("renders the finished Korean homepage", async () => {
   assert.match(html, /Lunar Legend GBA/);
   assert.match(html, /LUNAR 산책하는 학원/);
   assert.match(html, /공개 RC2/);
-  assert.match(html, /RC2 공개 보류/);
+  assert.match(html, /v0\.9\.0-rc2 공개 RC/);
   assert.match(html, /미검수 공개 베타/);
   assert.match(html, /public-beta-1 공개/);
   assert.match(html, /내 기기에서 바로 적용합니다/);
   assert.match(html, /LOCAL BPS \+ IPS PATCHER/);
   assert.match(html, /BPS는 자체 체크섬, IPS는 도트말씨 공개 승인 해시/);
   assert.match(html, /eyj79@naver\.com/);
-  assert.match(html, /산책하는 학원 IPS는 공개했고, GBA RC2는 보류합니다/);
+  assert.match(html, /Game Gear 공개 베타와 GBA 공개 RC를 제공합니다/);
+  assert.match(html, /44A4FFF7…2499FC1B/);
+  assert.match(
+    html,
+    /제작자 또는 필요한 권리자라고 진술한 사용자의 글꼴 배포 허가/,
+  );
+  assert.match(
+    html,
+    /github\.com\/eyj0604\/dotmalssi-homepage\/releases\/tag\/lunar-legend-gba-ko-v0\.9\.0-rc2/,
+  );
   assert.match(
     html,
     /github\.com\/eyj0604\/dotmalssi-homepage\/releases\/tag\/lunar-sanposuru-gakuen-kr-public-beta-1/,
@@ -88,6 +97,8 @@ test("renders the finished Korean homepage", async () => {
   assert.doesNotMatch(html, /href="[^"]+\.bps"/i);
   assert.doesNotMatch(html, /href="[^"]+\.ips"/i);
   assert.doesNotMatch(html, /roms?(?:download|\/|\.)/i);
+  assert.doesNotMatch(html, /RC2 공개 보류|글꼴 권리 확인 전 공개 보류/);
+  assert.doesNotMatch(html, /글꼴 제작자의 배포 허가/);
 });
 
 test("ships canonical brand assets and accessibility rules", async () => {

@@ -7,11 +7,11 @@ const projects = [
     id: "lunar",
     title: "Lunar Legend GBA",
     platform: "GAME BOY ADVANCE",
-    status: "RC2 공개 보류",
-    tone: "hold",
+    status: "공개 RC2",
+    tone: "release",
     summary:
-      "기술 후보 v0.9.0-rc2는 준비됐지만 구형 글꼴 이용 조건과 공개 패키지 게이트를 확인하고 있습니다.",
-    next: "다음 게이트 · 글꼴 권리 확인 또는 교체, 새 패키지 검수와 정확한 해시 승인",
+      "v0.9.0-rc2를 공개했습니다. 정확한 패키지와 글꼴 권리 고지, 독립 검수와 클린 적용 QA를 함께 제공합니다.",
+    next: "다음 게이트 · 사람 문맥 검토 1,266건과 엔딩까지의 연속 플레이스루",
     stats: ["전체 10,144", "번역 확인 8,878", "사람 판단 1,266", "승인 배치 0"],
   },
   {
@@ -62,18 +62,23 @@ const releaseLibrary = [
     id: "lunar-legend",
     title: "Lunar Legend",
     platform: "Game Boy Advance · 2002 · RPG",
-    status: "RC2 공개 보류",
-    tone: "hold",
+    status: "v0.9.0-rc2 공개 RC",
+    tone: "release",
     description:
       "드래곤 마스터를 꿈꾸는 아레스와 루나의 여정을 휴대용으로 다시 구성한 작품입니다. 2D 필드와 턴제 전투, 아츠 게이지를 중심으로 진행합니다.",
     patchNote:
-      "한국어 기술 후보 v0.9.0-rc2는 상태창과 파티 이름 가독성을 보완했습니다. 구형 글꼴 이용 조건이 확인되지 않아 다운로드는 열지 않습니다.",
+      "상태창과 파티 이름 가독성을 보완한 공개 RC입니다. 제작자 또는 필요한 권리자라고 진술한 사용자의 글꼴 배포 허가, 독립 검수와 클린 적용 QA를 통과했지만 사람 문맥 검토 1,266건과 엔딩까지의 연속 플레이는 남아 있습니다.",
     facts: [
-      "지원 예정 원본 · 북미판 ALNE · 8,388,608 bytes",
+      "지원 원본 · 북미판 ALNE · 8,388,608 bytes",
+      "ZIP SHA-256 · 44A4FFF7…2499FC1B",
       "BPS SHA-256 · F13F006A…A88A8CFE",
       "게임플레이 영상은 영어판 원작 참고용",
     ],
     links: [
+      {
+        label: "패치 내려받기",
+        href: "https://github.com/eyj0604/dotmalssi-homepage/releases/tag/lunar-legend-gba-ko-v0.9.0-rc2",
+      },
       {
         label: "게임 정보",
         href: "https://en.wikipedia.org/wiki/Lunar_Legend",
@@ -367,8 +372,9 @@ export default function Home() {
             </div>
 
             <p className="snapshot-note">
-              Lunar Legend RC2는 공개 보류 상태입니다. LUNAR 산책하는 학원은
-              전체 플레이가 끝나지 않은 공개 베타이므로 정식판과 구분합니다.
+              Lunar Legend RC2와 LUNAR 산책하는 학원 public-beta-1을
+              공개했습니다. 두 패치 모두 전체 플레이가 끝난 정식판이 아니므로
+              RC·베타 표시와 남은 검증 범위를 확인해 주세요.
             </p>
           </div>
         </section>
@@ -458,14 +464,15 @@ export default function Home() {
             <div className="patch-center-grid">
               <BrowserPatcher />
               <aside className="release-hold" aria-labelledby="release-hold-title">
-                <p className="section-kicker">PUBLIC BETA</p>
+                <p className="section-kicker">PUBLIC RELEASES</p>
                 <h3 id="release-hold-title">
-                  산책하는 학원 IPS는 공개했고, GBA RC2는 보류합니다.
+                  Game Gear 공개 베타와 GBA 공개 RC를 제공합니다.
                 </h3>
                 <p>
                   Game Gear public-beta-1은 정확한 IPS와 지원 원본·결과 해시를
-                  확인합니다. Lunar Legend GBA 기술 후보는 구형 갈무리M 글꼴의
-                  공개 이용 조건이 해결되기 전까지 내려받기를 열지 않습니다.
+                  확인합니다. Lunar Legend GBA v0.9.0-rc2는 정확한 ZIP·BPS
+                  해시와 글꼴 권리 고지, 독립 검수·클린 적용 결과를 함께
+                  공개합니다.
                 </p>
                 <dl>
                   <div>
@@ -482,7 +489,15 @@ export default function Home() {
                   </div>
                   <div>
                     <dt>GBA</dt>
-                    <dd>글꼴 권리 확인 전 공개 보류</dd>
+                    <dd>
+                      <a
+                        href="https://github.com/eyj0604/dotmalssi-homepage/releases/tag/lunar-legend-gba-ko-v0.9.0-rc2"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        v0.9.0-rc2 공개 RC
+                      </a>
+                    </dd>
                   </div>
                   <div>
                     <dt>제보</dt>
